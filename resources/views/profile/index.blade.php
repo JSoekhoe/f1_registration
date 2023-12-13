@@ -15,11 +15,19 @@
                         @else
                             <p>{{ __('No profile picture available.') }}</p>
                         @endif
+
                         <p>{{ __('Username: ') }} {{ $user->username }}</p>
-                        {{-- Add other user fields as needed --}}
+
+                        @if($user->trophies > 0)
+                            <p>{{ __('Trophies: ') }} {{ $user->trophies }}</p>
+                        @else
+                            <p>{{ __('No trophies earned yet.') }}</p>
+                        @endif
+
                     @else
                         <p>{{ __('No profile information found.') }}</p>
                     @endif
+
                 </div>
             </div>
         </div>

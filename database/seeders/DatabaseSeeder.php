@@ -12,11 +12,37 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+        // Seed the allowed locations
+        $locations =
+            [
+                'Albert Park Circuit - Australia',
+                'Autódromo Hermanos Rodríguez - Mexico',
+                'Autodromo Internazionale Enzo e Dino Ferrari - Italy',
+                'Autodromo José Carlos Pace - Brazil',
+//                'Autodromo Nazionale di Monza - Italy',
+                'Bahrain International Circuit - Bahrain',
+                'Baku City Circuit - Azerbaijan',
+                'Circuit de Barcelona-Catalunya - Spain',
+                'Circuit de Monaco - Monaco',
+                'Circuit de Spa-Francorchamps - Belgium',
+                'Circuit Gilles-Villeneuve - Canada',
+                'Circuit of the Americas - United States',
+                'Circuit Zandvoort - The Netherlands',
+                'Hungaroring - Hungary',
+                'Jeddah Corniche Circuit - Saudi Arabia',
+                'Las Vegas Strip Circuit - United States',
+                'Lusail International Circuit - Qatar',
+                'Marina Bay Street Circuit - Singapore',
+                'Miami International Autodrome - United States',
+                'Red Bull Ring - Austria',
+//                'Shanghai International Circuit - China',
+                'Silverstone Circuit - United Kingdom',
+                'Suzuka International Racing Course - Japan',
+                'Yas Marina Circuit - United Arab Emirates',
+            ];
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        foreach ($locations as $location) {
+            \DB::table('allowed_locations')->insert(['location' => $location]);
+        }
     }
 }

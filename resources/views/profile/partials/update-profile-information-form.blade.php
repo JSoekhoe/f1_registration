@@ -16,11 +16,15 @@
     <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
         @csrf
         @method('patch')
+        <!-- Display current profile picture -->
+        @if ($user->profile_picture)
+            <img src="{{ asset('storage/' . $user->profile_picture) }}" alt="Profile Picture" class="mt-2" width="100">
+        @endif
 
-        <!-- Profile Picture -->
+        <!-- Profile Picture Input -->
         <div>
             <x-input-label for="profile_picture" :value="__('Profile Picture')" />
-            <input id="profile_picture" name="profile_picture" type="file" class="mt-1 block w-full" required autofocus />
+            <input id="profile_picture" name="profile_picture" type="file" class="mt-1 block w-full" />
             <x-input-error class="mt-2" :messages="$errors->get('profile_picture')" />
         </div>
 

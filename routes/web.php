@@ -29,4 +29,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::middleware('auth')->group(function () {
+    Route::get('/laps', [\App\Http\Controllers\LapsController::class, 'index'])->name('laps.index');
+    Route::get('/laps/create', [\App\Http\Controllers\LapsController::class, 'create'])->name('laps.create');
+    Route::post('/laps/store', [\App\Http\Controllers\LapsController::class, 'store'])->name('laps.store');
+    Route::delete('/laps/destroy', [\App\Http\Controllers\LapsController::class, 'destroy'])->name('laps.destroy');
+});
+
+
 require __DIR__.'/auth.php';
