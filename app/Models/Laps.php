@@ -12,5 +12,11 @@ class Laps extends Model
         'lap_id',
         'location_id',
         'lap_datetime',
+
     ];
+
+    public function allowedLocation()
+    {
+        return $this->belongsTo(AllowedLocation::class, 'location_id');
+    }
 }

@@ -67,7 +67,13 @@ class LapsController extends Controller
 
     public function destroy(Request $request): RedirectResponse
     {
-        // Implement destroy logic
-        // You can delete the lap based on the request data
+        $lap = Laps::find($request->input('lap_id'));
+
+        if ($lap) {
+            $lap->delete();
+            return redirect()->route('laps.index')->with('success', 'Lap deleted successfully!');
+        } else {
+            return redirect()->route('laps.index')->with('error', 'Lap not found.');
+        }
     }
 }
