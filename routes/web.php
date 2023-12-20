@@ -29,12 +29,15 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// routes/web.php
+
 Route::middleware('auth')->group(function () {
     Route::get('/laps', [\App\Http\Controllers\LapsController::class, 'index'])->name('laps.index');
     Route::get('/laps/create', [\App\Http\Controllers\LapsController::class, 'create'])->name('laps.create');
     Route::post('/laps/store', [\App\Http\Controllers\LapsController::class, 'store'])->name('laps.store');
+    Route::get('/laps/edit', [\App\Http\Controllers\LapsController::class, 'edit'])->name('laps.edit');
+    Route::put('/laps/update', [\App\Http\Controllers\LapsController::class, 'update'])->name('laps.update');
     Route::delete('/laps/destroy', [\App\Http\Controllers\LapsController::class, 'destroy'])->name('laps.destroy');
 });
-
 
 require __DIR__.'/auth.php';

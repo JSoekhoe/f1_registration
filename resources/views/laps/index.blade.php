@@ -52,6 +52,11 @@
                                     {{ $lap->lap_datetime }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-no-wrap">
+                                    <a href="{{ route('laps.edit', ['lap' => $lap->id]) }}" class="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-600">
+                                        Edit
+                                    </a>
+                                </td>
+                                <td class="px-6 py-4 whitespace-no-wrap">
                                     <form method="post" action="{{ route('laps.destroy', ['lap_id' => $lap]) }}" class="inline" onsubmit="return confirm('Are you sure you want to delete this lap?')">
                                         @csrf
                                         @method('DELETE')

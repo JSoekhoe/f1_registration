@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('laps', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('lap_id'); // Assuming lap_id is an identifier for the lap
+            $table->id('lap_id');
+            $table->foreignId('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('location_id'); // Foreign key to allowed_locations table
             $table->foreign('location_id')->references('id')->on('allowed_locations');
-            $table->dateTime('lap_datetime');
+            $table->timestamp('lap_datetime');
             $table->timestamps();
         });
     }
