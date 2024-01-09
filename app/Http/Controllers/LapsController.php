@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Models\AllowedLocation;
 use App\Models\Laps;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Carbon;
 use Illuminate\View\View;
 
 class LapsController extends Controller
@@ -33,24 +33,28 @@ class LapsController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        // Validate the form data
         $request->validate([
             'location_id' => 'required|exists:allowed_locations,id',
             'lap_datetime' => 'required|date',
+            'lap_time' => 'required|regex:/^\d{2}:\d{2},\d{2}$/',
+
         ]);
 
-        // Create a new Lap model and associate it with the authenticated user
-        $lap = auth()->user()->laps()->create([
+        // Parse lap time
+        $lapTime = Carbon::createFromFormat('i:s,u', $request->input('lap_time') . '00');
+
+
+        // Create the lap
+        $lap = $request->user()->laps()->create([
             'location_id' => $request->input('location_id'),
             'lap_datetime' => $request->input('lap_datetime'),
+            'lap_time' => $request->input('lap_time'), // Store as MM:SS.u
         ]);
 
         return redirect()->route('laps.index')->with('success', 'Lap created successfully!');
     }
 
-
-
-    public function edit(Laps $lap)
+    public function edit( Laps $lap)
     {
         // Retrieve a list of allowed locations from the database
         $allowedLocations = AllowedLocation::all();
@@ -59,26 +63,52 @@ class LapsController extends Controller
             'lap' => $lap,
             'allowedLocations' => $allowedLocations,
         ]);
-    }
 
+    }
 
     public function update(Request $request, Laps $lap)
     {
-        // Validate the form data
         $request->validate([
             'location_id' => 'required|exists:allowed_locations,id',
             'lap_datetime' => 'required|date',
+            'lap_time' => 'required|regex:/^\d{2}:\d{2},\d{2}$/',
         ]);
+        file_put_contents('C:\Users\soekh\assignmentsJS\f1_registration\app\Http\Controllers\LapsController.txt', $request->input('lap_time')." \n", FILE_APPEND);
 
-        // Update the Lap model with the new data
         $lap->update([
             'location_id' => $request->input('location_id'),
             'lap_datetime' => $request->input('lap_datetime'),
+            'lap_time' => $request->input('lap_time'),
         ]);
 
         return redirect()->route('laps.index')->with('success', 'Lap updated successfully!');
     }
 
+    public function ajaxValidate(Request $request, Laps $lap)
+    {
+        if (!$request->user()->isAdmin()) {
+            return response()->json(['error' => 'You do not have permission to validate this lap.'], 403);
+        }
+
+        // Update the lap's validation status to true
+        $lap->validated = true;
+        $lap->save();
+
+        return response()->json(['message' => 'Lap validated successfully.']);
+    }
+
+    public function ajaxUnvalidate(Request $request, Laps $lap)
+    {
+        if (!$request->user()->isAdmin()) {
+            return response()->json(['error' => 'You do not have permission to unvalidate this lap.'], 403);
+        }
+
+        // Update the lap's validation status to false
+        $lap->validated = false;
+        $lap->save();
+
+        return response()->json(['message' => 'Lap unvalidated successfully.']);
+    }
 
     public function destroy(Request $request)
     {

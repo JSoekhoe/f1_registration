@@ -16,7 +16,9 @@ return new class extends Migration
             $table->foreignId('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('location_id'); // Foreign key to allowed_locations table
             $table->foreign('location_id')->references('id')->on('allowed_locations');
-            $table->timestamp('lap_datetime');
+            $table->datetime('lap_datetime');
+            $table->string('lap_time')->nullable();
+            $table->boolean('validated')->default(false);
             $table->timestamps();
         });
     }

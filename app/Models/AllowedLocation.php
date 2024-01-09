@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class AllowedLocation extends Model
 {
-    use HasFactory;
+
     protected $fillable = ['location'];
+
+    public function laps()
+    {
+        return $this->hasMany(Laps::class, 'location_id');
+    }
 }

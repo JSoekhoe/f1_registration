@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('allowed_locations', function (Blueprint $table) {
             $table->id();
             $table->string('location')->unique();
+            $table->timestamps();
         });
     }
 

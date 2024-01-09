@@ -35,7 +35,13 @@
                                 Date and Time
                             </th>
                             <th class="px-6 py-3 bg-gray-50 dark:bg-gray-800 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                Lap Time
+                            </th>
+                            <th class="px-6 py-3 bg-gray-50 dark:bg-gray-800 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                 Actions
+                            </th>
+                            <th class="px-6 py-3 bg-gray-50 dark:bg-gray-800 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+
                             </th>
                         </tr>
                         </thead>
@@ -49,14 +55,38 @@
                                     {{ $lap->allowedLocation->location }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-no-wrap">
-                                    {{ $lap->lap_datetime }}
+                                    @if ($lap->lap_datetime)
+                                        {{ \Carbon\Carbon::parse($lap->lap_datetime)->format('d-m-Y H:i') }}
+                                    @else
+                                        N/A
+                                    @endif
                                 </td>
                                 <td class="px-6 py-4 whitespace-no-wrap">
-                                    <a href="{{ route('laps.edit', ['lap' => $lap->id]) }}" class="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-600">
+                                    {{ $lap->lap_time ?? '' }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-no-wrap">
+                                    <a href="{{ route('laps.edit', ['lap' => $lap->lap_id]) }}" class="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-600">
                                         Edit
                                     </a>
                                 </td>
                                 <td class="px-6 py-4 whitespace-no-wrap">
+                                    @can('validate-lap', $lap)
+                                        @if ($lap->validated)
+                                            <form class="inline" id="unvalidate-form-{{ $lap->lap_id }}">
+                                                @csrf
+                                                <button type="button" class="unvalidate-button text-orange-600 dark:text-orange-400 hover:text-orange-900 dark:hover:text-orange-600">
+                                                    Unvalidate
+                                                </button>
+                                            </form>
+                                        @else
+                                            <form class="inline" id="validate-form-{{ $lap->lap_id }}">
+                                                @csrf
+                                                <button type="button" class="validate-button text-green-600 dark:text-green-400 hover:text-green-900 dark:hover:text-green-600">
+                                                    Validate
+                                                </button>
+                                            </form>
+                                        @endif
+                                    @endcan
                                     <form method="post" action="{{ route('laps.destroy', ['lap_id' => $lap]) }}" class="inline" onsubmit="return confirm('Are you sure you want to delete this lap?')">
                                         @csrf
                                         @method('DELETE')
@@ -74,3 +104,36 @@
         </div>
     </div>
 </x-app-layout>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $(".validate-button, .unvalidate-button").click(function() {
+            var lapId = $(this).closest("form").attr("id").split("-")[2];
+            var isValidateAction = $(this).hasClass("validate-button");
+            var button = $(this); // Store a reference to the button
+
+            $.ajax({
+                type: "POST",
+                url: isValidateAction ? `/laps/ajax-validate/${lapId}` : `/laps/ajax-unvalidate/${lapId}`,
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "_method": "PUT",
+                },
+                success: function(response) {
+                    if (isValidateAction) {
+                        button.text("Unvalidate"); // Update button text
+                        button.removeClass("validate-button").addClass("unvalidate-button"); // Update button class
+                        button.css("color", "orange"); // Change text color to orange
+                    } else {
+                        button.text("Validate"); // Update button text
+                        button.removeClass("unvalidate-button").addClass("validate-button"); // Update button class
+                        button.css("color", "green"); // Change text color to green
+                    }
+                },
+                error: function(response) {
+                    // Handle errors if necessary
+                }
+            });
+        });
+    });
+</script>

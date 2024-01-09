@@ -40,6 +40,16 @@
                                    class="mt-1 p-2 border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring focus:ring-indigo-200 dark:focus:ring-indigo-600 focus:border-indigo-500 dark:focus:border-indigo-500 block w-full shadow-sm sm:text-sm rounded-md">
                         </div>
 
+                        <div class="mb-4">
+                            <label for="lap_time" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                Lap Time (Minutes:Seconds,Hundredths):
+                            </label>
+                            <input type="text" id="lap_time" name="lap_time" placeholder="00:00,00" pattern="\d{2}:\d{2}\,\d{2}"
+                                   title="Please enter a valid lap time (mm:ss,00)"
+                                   class="mt-1 p-2 border border-gray-300 dark:border-gray-700
+        focus:outline-none focus:ring focus:ring-indigo-200 dark:focus:ring-indigo-600
+        focus:border-indigo-500 dark:focus:border-indigo-500 block w-full shadow-sm sm:text-sm rounded-md">
+                        </div>
                         <button type="submit"
                                 class="inline-flex items-center px-4 py-2 bg-indigo-500 border border-transparent rounded-md font-semibold text-white hover:bg-indigo-600 focus:outline-none focus:ring focus:ring-indigo-200 dark:focus:ring-indigo-600 focus:border-indigo-500 dark:focus:border-indigo-500 active:bg-indigo-800">
                             Create Lap

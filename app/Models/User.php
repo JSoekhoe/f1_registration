@@ -50,4 +50,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Laps::class);
     }
+    public function isAdmin()
+    {
+        return $this->is_admin; // Assuming is_admin is a boolean
+    }
 }
