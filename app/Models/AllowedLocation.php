@@ -12,6 +12,6 @@ class AllowedLocation extends Model
 
     public function laps()
     {
-        return $this->hasMany(Laps::class, 'location_id');
+        return $this->hasMany(Laps::class, 'location_id', 'id');
     }
 }

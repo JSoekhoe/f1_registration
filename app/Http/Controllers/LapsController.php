@@ -14,14 +14,46 @@ class LapsController extends Controller
     public function index(Request $request): View
     {
         // Retrieve laps associated with the authenticated user
-        $laps = $request->user()->laps;
+        $lapsQuery = $request->user()->laps();
+
+        // Apply filters if provided in the request
+        if ($request->filled('location')) {
+            $lapsQuery->where('location_id', $request->input('location'));
+        }
+
+        // Define the current sorting criteria and direction based on query parameters
+        $currentSort = $request->get('sort', 'lap_datetime');
+        $currentDirection = $request->get('direction', 'asc');
+        $currentSortLabel = '';
+        if ($currentSort === 'placement') {
+            $currentSortLabel = $currentDirection === 'asc' ? 'Placement 1 -> 20' : 'Placement 1 <- 20';
+        } elseif ($currentSort === 'lap_datetime') {
+            $currentSortLabel = $currentDirection === 'asc' ? 'Oldest First' : 'Newest First';
+        } elseif ($currentSort === 'location_id') {
+            $currentSortLabel = $currentDirection === 'asc' ? 'Location Name (A-Z)' : 'Location Name (Z-A)';
+        } elseif ($currentSort === 'validated') {
+            $currentSortLabel = $currentDirection === 'asc' ? 'To Be Validated' : 'To Be Unvalidated';
+        }
+
+        // Apply sorting to the query
+        $lapsQuery->orderBy($currentSort, $currentDirection);
+
+        // Use the `get` method with the arguments to retrieve the laps
+        $laps = $lapsQuery->get();
+
+        // Retrieve a list of allowed locations from the database
+        $allowedLocations = AllowedLocation::all();
 
         return view('laps.index', [
             'laps' => $laps,
+            'currentSort' => $currentSort,
+            'currentDirection' => $currentDirection,
+            'currentSortLabel' => $currentSortLabel,
+            'allowedLocations' => $allowedLocations,
         ]);
     }
 
-    public function create(Request $request): View
+    public function create()
     {
         // Retrieve a list of allowed locations from the database
         $allowedLocations = AllowedLocation::all();
@@ -37,7 +69,7 @@ class LapsController extends Controller
             'location_id' => 'required|exists:allowed_locations,id',
             'lap_datetime' => 'required|date',
             'lap_time' => 'required|regex:/^\d{2}:\d{2},\d{2}$/',
-
+            'placement' => 'required|integer|between:1,20',
         ]);
 
         // Parse lap time
@@ -49,6 +81,7 @@ class LapsController extends Controller
             'location_id' => $request->input('location_id'),
             'lap_datetime' => $request->input('lap_datetime'),
             'lap_time' => $request->input('lap_time'), // Store as MM:SS.u
+            'placement' => $request->input('placement'),
         ]);
 
         return redirect()->route('laps.index')->with('success', 'Lap created successfully!');
@@ -62,6 +95,7 @@ class LapsController extends Controller
         return view('laps.edit', [
             'lap' => $lap,
             'allowedLocations' => $allowedLocations,
+
         ]);
 
     }
@@ -72,6 +106,7 @@ class LapsController extends Controller
             'location_id' => 'required|exists:allowed_locations,id',
             'lap_datetime' => 'required|date',
             'lap_time' => 'required|regex:/^\d{2}:\d{2},\d{2}$/',
+            'placement' => 'required|integer|between:1,20',
         ]);
         file_put_contents('C:\Users\soekh\assignmentsJS\f1_registration\app\Http\Controllers\LapsController.txt', $request->input('lap_time')." \n", FILE_APPEND);
 
@@ -79,6 +114,7 @@ class LapsController extends Controller
             'location_id' => $request->input('location_id'),
             'lap_datetime' => $request->input('lap_datetime'),
             'lap_time' => $request->input('lap_time'),
+            'placement' => $request->input('placement'),
         ]);
 
         return redirect()->route('laps.index')->with('success', 'Lap updated successfully!');

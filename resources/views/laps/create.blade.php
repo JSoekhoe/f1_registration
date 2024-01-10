@@ -18,7 +18,14 @@
 
                     <form method="post" action="{{ route('laps.store') }}">
                         @csrf
-
+                        <div class="mb-4">
+                            <label for="placement" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                Placement:
+                            </label>
+                            <input type="number" id="placement" name="placement" required
+                                   class="mt-1 p-2 border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring focus:ring-indigo-200 dark:focus:ring-indigo-600 focus:border-indigo-500 dark:focus:border-indigo-500 block w-full shadow-sm sm:text-sm rounded-md"
+                                   min="1" max="20">
+                        </div>
                         <div class="mb-4">
                             <label for="location_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                 Location:
@@ -31,7 +38,6 @@
                                 @endforeach
                             </select>
                         </div>
-
                         <div class="mb-4">
                             <label for="lap_datetime" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                 Lap Date and Time:
@@ -39,7 +45,6 @@
                             <input type="datetime-local" id="lap_datetime" name="lap_datetime" required
                                    class="mt-1 p-2 border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring focus:ring-indigo-200 dark:focus:ring-indigo-600 focus:border-indigo-500 dark:focus:border-indigo-500 block w-full shadow-sm sm:text-sm rounded-md">
                         </div>
-
                         <div class="mb-4">
                             <label for="lap_time" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                 Lap Time (Minutes:Seconds,Hundredths):

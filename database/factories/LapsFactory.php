@@ -18,7 +18,8 @@ class LapsFactory extends Factory
             'user_id' => User::inRandomOrder()->first()->id,
             'location_id' => AllowedLocation::inRandomOrder()->first()->id,
             'lap_datetime' => $this->faker->dateTimeBetween('-1 year', 'now'),
-            'lap_time' => $this->faker->regexify('[0][0-3]:[0-5][0-9]\,[0-9]{2}')
+            'lap_time' => $this->faker->regexify('[0][0-3]:[0-5][0-9]\,[0-9]{2}'),
+            'placement'=> $this->faker->numberBetween(1, 20),
         ];
     }
 }

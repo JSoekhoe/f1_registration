@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 Route::get('/dashboard', function () {
@@ -39,6 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/laps/{lap}/update', [\App\Http\Controllers\LapsController::class, 'update'])->name('laps.update'); // Use PUT for updating laps
     Route::put('/laps/ajax-validate/{lap}', [\App\Http\Controllers\LapsController::class, 'ajaxValidate'])->name('laps.ajax-validate'); // Use POST for validation
     Route::put('/laps/ajax-unvalidate/{lap}', [\App\Http\Controllers\LapsController::class, 'ajaxUnvalidate'])->name('laps.ajax-unvalidate'); // Use POST for unvalidation
+    Route::get('/laps/filter', [\App\Http\Controllers\LapsController::class, 'filter'])->name('laps.filter');
     Route::delete('/laps/destroy', [\App\Http\Controllers\LapsController::class, 'destroy'])->name('laps.destroy');
 });
 

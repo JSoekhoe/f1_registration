@@ -19,7 +19,15 @@
                     <form method="post" action="{{ route('laps.update', ['lap' => $lap->lap_id]) }}">
                         @csrf
                         @method('PUT')
-
+                        <div class="mb-4">
+                            <label for="placement" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                Placement:
+                            </label>
+                            <input type="number" id="placement" name="placement" required
+                                   value="{{ $lap->placement }}"
+                                   class="mt-1 p-2 border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring focus:ring-indigo-200 dark:focus:ring-indigo-600 focus:border-indigo-500 dark:focus:border-indigo-500 block w-full shadow-sm sm:text-sm rounded-md"
+                                   min="1" max="20">
+                        </div>
                         <div class="mb-4">
                             <label for="location_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                 Location:

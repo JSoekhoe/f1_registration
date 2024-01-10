@@ -17,10 +17,12 @@ return new class extends Migration
             $table->unsignedBigInteger('location_id'); // Foreign key to allowed_locations table
             $table->foreign('location_id')->references('id')->on('allowed_locations');
             $table->datetime('lap_datetime');
-            $table->string('lap_time')->nullable();
+            $table->string('lap_time');
+            $table->unsignedInteger('placement');
             $table->boolean('validated')->default(false);
             $table->timestamps();
         });
+        \Illuminate\Support\Facades\DB::statement('ALTER TABLE laps ADD CONSTRAINT placement CHECK (placement >= 1 AND placement <= 20)');
     }
 
     /**

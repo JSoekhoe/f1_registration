@@ -4,7 +4,6 @@
             {{ __('Laps') }}
         </h2>
     </x-slot>
-
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -29,6 +28,9 @@
                                 Lap ID
                             </th>
                             <th class="px-6 py-3 bg-gray-50 dark:bg-gray-800 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                Placement
+                            </th>
+                            <th class="px-6 py-3 bg-gray-50 dark:bg-gray-800 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                 Location
                             </th>
                             <th class="px-6 py-3 bg-gray-50 dark:bg-gray-800 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
@@ -41,7 +43,7 @@
                                 Actions
                             </th>
                             <th class="px-6 py-3 bg-gray-50 dark:bg-gray-800 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-
+                                @include('layouts.filter_laps')
                             </th>
                         </tr>
                         </thead>
@@ -50,6 +52,9 @@
                             <tr>
                                 <td class="px-6 py-4 whitespace-no-wrap">
                                     {{ $lap->lap_id }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-no-wrap">
+                                    {{ $lap->placement }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-no-wrap">
                                     {{ $lap->allowedLocation->location }}

@@ -13,7 +13,17 @@ return [
     |
     */
 
-    'default' => env('MAIL_MAILER', 'smtp'),
+    'gmail' => [
+        'transport' => 'smtp',
+        'host' => env('MAIL_HOST', 'smtp.gmail.com'),
+        'port' => env('MAIL_PORT', 587),
+        'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+        'username' => env('jjj.windesheim@gmail.com'),
+        'password' => env('TripleJwindesheim'),
+        'timeout' => null,
+        'auth_mode' => null,
+    ],
+
 
     /*
     |--------------------------------------------------------------------------
