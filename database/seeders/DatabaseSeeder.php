@@ -65,7 +65,7 @@ class DatabaseSeeder extends Seeder
 
 
         Laps::factory()
-            ->count(50) // Specify the number of laps to create
+            ->count(500) // Specify the number of laps to create
             ->create();
     }
 }

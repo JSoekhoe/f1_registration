@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RaceController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,13 +23,12 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
-    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'index'])->name('profile.index');
+    Route::get('/profile/edit', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [\App\Http\Controllers\ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// routes/web.php
 
 Route::middleware('auth')->group(function () {
     Route::get('/laps', [\App\Http\Controllers\LapsController::class, 'index'])->name('laps.index');
@@ -46,5 +45,12 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/leaderboard', [\App\Http\Controllers\LeaderboardController::class, 'index'])->name('leaderboard.index');
 
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/races', [RaceController::class, 'index'])->name('races.index');
+    Route::get('/races/edit', [RaceController::class, 'edit'])->name('races.edit');
+    Route::patch('/races', [RaceController::class, 'update'])->name('races.update');
+    Route::delete('/races', [RaceController::class, 'destroy'])->name('races.destroy');
 });
     require __DIR__.'/auth.php';

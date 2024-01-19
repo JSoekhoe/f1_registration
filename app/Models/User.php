@@ -54,4 +54,9 @@ class User extends Authenticatable
     {
         return $this->is_admin; // Assuming is_admin is a boolean
     }
+
+    public function races()
+    {
+        return $this->hasMany(Race::class);
+    }
 }

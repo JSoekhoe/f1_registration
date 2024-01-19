@@ -16,6 +16,11 @@ class LeaderboardController extends Controller
         // Retrieve the selected location filter from the request
         $selectedLocation = $request->input('location_filter');
 
+        // If no location filter is provided in the request, set it to the first allowed location's ID
+        if (empty($selectedLocation) && $locations->count() > 0) {
+            $selectedLocation = $locations->first()->id;
+        }
+
         // Fetch validated lap data based on the selected location filter
         $lapsQuery = Laps::where('validated', true);
 
@@ -40,6 +45,7 @@ class LeaderboardController extends Controller
                 'lap_id' => $lap->lap_id,
                 'lap_time' => $lap->lap_time,
                 'username' => $lap->user->username,
+                'lap_number'=> $lap->lap_number,
                 'lap_datetime' => $lap->lap_datetime ? \Carbon\Carbon::parse($lap->lap_datetime)->format('d-m-Y H:i') : 'N/A',
             ];
 

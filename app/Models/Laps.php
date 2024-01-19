@@ -18,7 +18,7 @@ class Laps extends Model
         'location_id',
         'lap_datetime',
         'lap_time',
-        'placement',
+        'lap_number',
         'validated',
     ];
     protected $dates = [

@@ -11,6 +11,7 @@ use Illuminate\View\View;
 
 class LapsController extends Controller
 {
+
     public function index(Request $request): View
     {
         // Retrieve laps associated with the authenticated user
@@ -25,8 +26,8 @@ class LapsController extends Controller
         $currentSort = $request->get('sort', 'lap_datetime');
         $currentDirection = $request->get('direction', 'asc');
         $currentSortLabel = '';
-        if ($currentSort === 'placement') {
-            $currentSortLabel = $currentDirection === 'asc' ? 'Placement 1 -> 20' : 'Placement 1 <- 20';
+        if ($currentSort === 'lap_number') {
+            $currentSortLabel = $currentDirection === 'asc' ? 'First Lap ' : 'Last Lap ';
         } elseif ($currentSort === 'lap_datetime') {
             $currentSortLabel = $currentDirection === 'asc' ? 'Oldest First' : 'Newest First';
         } elseif ($currentSort === 'location_id') {
@@ -37,6 +38,19 @@ class LapsController extends Controller
 
         // Apply sorting to the query
         $lapsQuery->orderBy($currentSort, $currentDirection);
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $searchTerm = $request->input('search');
+            $lapsQuery->where(function ($query) use ($searchTerm) {
+                $query->where('lap_id', 'LIKE', "%$searchTerm%")
+                    ->orWhere('lap_number', 'LIKE', "%$searchTerm%")
+                    ->orWhere('lap_datetime', 'LIKE', "%$searchTerm%")
+                    ->orWhereHas('allowedLocation', function ($subquery) use ($searchTerm) {
+                        $subquery->where('location', 'LIKE', "%$searchTerm%");
+                    });
+            });
+        }
 
         // Use the `get` method with the arguments to retrieve the laps
         $laps = $lapsQuery->get();
@@ -69,7 +83,7 @@ class LapsController extends Controller
             'location_id' => 'required|exists:allowed_locations,id',
             'lap_datetime' => 'required|date',
             'lap_time' => 'required|regex:/^\d{2}:\d{2},\d{2}$/',
-            'placement' => 'required|integer|between:1,20',
+            '' => 'required|integer|between:1,99',
         ]);
 
         // Parse lap time
@@ -81,7 +95,7 @@ class LapsController extends Controller
             'location_id' => $request->input('location_id'),
             'lap_datetime' => $request->input('lap_datetime'),
             'lap_time' => $request->input('lap_time'), // Store as MM:SS.u
-            'placement' => $request->input('placement'),
+            '' => $request->input(''),
         ]);
 
         return redirect()->route('laps.index')->with('success', 'Lap created successfully!');
@@ -106,15 +120,13 @@ class LapsController extends Controller
             'location_id' => 'required|exists:allowed_locations,id',
             'lap_datetime' => 'required|date',
             'lap_time' => 'required|regex:/^\d{2}:\d{2},\d{2}$/',
-            'placement' => 'required|integer|between:1,20',
+            '' => 'required|integer|between:1,99',
         ]);
-        file_put_contents('C:\Users\soekh\assignmentsJS\f1_registration\app\Http\Controllers\LapsController.txt', $request->input('lap_time')." \n", FILE_APPEND);
-
         $lap->update([
             'location_id' => $request->input('location_id'),
             'lap_datetime' => $request->input('lap_datetime'),
             'lap_time' => $request->input('lap_time'),
-            'placement' => $request->input('placement'),
+            '' => $request->input(''),
         ]);
 
         return redirect()->route('laps.index')->with('success', 'Lap updated successfully!');
