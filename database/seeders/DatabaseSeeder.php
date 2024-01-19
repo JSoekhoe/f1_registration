@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\AllowedLocation;
 use App\Models\Laps;
+use App\Models\Prize;
 use App\Models\User;
 use Database\Factories\LapsFactory;
 use Illuminate\Database\Seeder;
@@ -63,9 +64,24 @@ class DatabaseSeeder extends Seeder
             User::create($user);
         }
 
+        $prizes = [
+            ['title' => 'first race', 'description' => 'get your first race validated','location' => $location],
+            ['title' => 'second race', 'description' => 'get your second race validated'],
+            ['title' => 'speed demon', 'description' => 'have the fastest validated lap on the Autódromo Hermanos Rodríguez - Mexico'],
+            // ... add more prize descriptions
+        ];
+
+        foreach ($prizes as $prizeData) {
+            $prize = Prize::create(['title' => $prizeData['title'], 'description' => $prizeData['description']]);
+            $prize->save();
+        }
+
+        User::factory()
+            ->count(10)
+            ->create();
 
         Laps::factory()
-            ->count(500) // Specify the number of laps to create
+            ->count(1000)
             ->create();
     }
 }

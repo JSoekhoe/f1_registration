@@ -19,10 +19,10 @@
                     @csrf
                     @method('PUT')
                     <div class="mb-4">
-                        <label for="round" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        <label for="lap_number" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                             Lap:
                         </label>
-                        <input type="number" id="round" name="round" required
+                        <input type="number" id="lap_number" name="lap_number" required
                                value="{{ $lap->lap_number }}"
                                class="mt-1 p-2 border border-gray-300 dark:border-gray-700
                                focus:outline-none focus:ring focus:ring-indigo-200 dark:focus:ring-indigo-600

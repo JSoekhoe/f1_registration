@@ -53,4 +53,13 @@ Route::middleware('auth')->group(function () {
     Route::patch('/races', [RaceController::class, 'update'])->name('races.update');
     Route::delete('/races', [RaceController::class, 'destroy'])->name('races.destroy');
 });
+
+Route::middleware('auth')->group(function () {
+    Route::get('/statistics', [\App\Http\Controllers\StatisticsController::class, 'index'])->name('statistics.index');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/prizes', [\App\Http\Controllers\PrizeController::class, 'index'])->name('prizes.index');
+});
+
     require __DIR__.'/auth.php';

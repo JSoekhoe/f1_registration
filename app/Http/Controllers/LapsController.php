@@ -14,8 +14,11 @@ class LapsController extends Controller
 
     public function index(Request $request): View
     {
-        // Retrieve laps associated with the authenticated user
-        $lapsQuery = $request->user()->laps();
+        // Check if the authenticated user is an admin
+        $isAdmin = $request->user()->isAdmin();
+
+        // Retrieve all laps or laps associated with the authenticated user
+        $lapsQuery = $isAdmin ? Laps::query() : $request->user()->laps();
 
         // Apply filters if provided in the request
         if ($request->filled('location')) {
@@ -83,7 +86,7 @@ class LapsController extends Controller
             'location_id' => 'required|exists:allowed_locations,id',
             'lap_datetime' => 'required|date',
             'lap_time' => 'required|regex:/^\d{2}:\d{2},\d{2}$/',
-            '' => 'required|integer|between:1,99',
+            'lap_number' => 'required|integer|between:1,99',
         ]);
 
         // Parse lap time
@@ -95,7 +98,7 @@ class LapsController extends Controller
             'location_id' => $request->input('location_id'),
             'lap_datetime' => $request->input('lap_datetime'),
             'lap_time' => $request->input('lap_time'), // Store as MM:SS.u
-            '' => $request->input(''),
+            'lap_number' => $request->input('lap_number'),
         ]);
 
         return redirect()->route('laps.index')->with('success', 'Lap created successfully!');
@@ -120,13 +123,13 @@ class LapsController extends Controller
             'location_id' => 'required|exists:allowed_locations,id',
             'lap_datetime' => 'required|date',
             'lap_time' => 'required|regex:/^\d{2}:\d{2},\d{2}$/',
-            '' => 'required|integer|between:1,99',
+            'lap_number' => 'required|integer|between:1,99',
         ]);
         $lap->update([
             'location_id' => $request->input('location_id'),
             'lap_datetime' => $request->input('lap_datetime'),
             'lap_time' => $request->input('lap_time'),
-            '' => $request->input(''),
+            'lap_number' => $request->input('lap_number'),
         ]);
 
         return redirect()->route('laps.index')->with('success', 'Lap updated successfully!');

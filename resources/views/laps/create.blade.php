@@ -22,7 +22,7 @@
                             <label for="lap_number" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                 Lap:
                             </label>
-                            <input type="number" id="round" name="round" required
+                            <input type="number" id="lap_number" name="lap_number" required
                                    class="mt-1 p-2 border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring focus:ring-indigo-200 dark:focus:ring-indigo-600 focus:border-indigo-500 dark:focus:border-indigo-500 block w-full shadow-sm sm:text-sm rounded-md"
                                    min="1" max="20">
                         </div>

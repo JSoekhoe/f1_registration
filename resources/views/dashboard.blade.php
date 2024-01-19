@@ -18,7 +18,8 @@
                             <a href="{{ route('laps.index') }}" class="w-full sm:w-1/3 h-20 flex items-center justify-center rounded-md border border-black bg-white dark:bg-gray-800 p-2 text-black dark:text-white hover:bg-gray-600 dark:hover:bg-gray-600 hover:text-white dark:hover:text-white">Laps</a>
                             <a href="{{ route('leaderboard.index') }}" class="w-full sm:w-1/3 h-20 flex items-center justify-center rounded-md border border-black bg-white dark:bg-gray-800 p-2 text-black dark:text-white hover:bg-gray-600 dark:hover:bg-gray-600 hover:text-white dark:hover:text-white">Leaderboard</a>
                             <a href="{{ route('races.index') }}" class="w-full sm:w-1/3 h-20 flex items-center justify-center rounded-md border border-black bg-white dark:bg-gray-800 p-2 text-black dark:text-white hover:bg-gray-600 dark:hover:bg-gray-600 hover:text-white dark:hover:text-white">Historical Races</a>
-                            <!-- Add more links as needed -->
+                            <a href="{{ route('statistics.index') }}" class="w-full sm:w-1/3 h-20 flex items-center justify-center rounded-md border border-black bg-white dark:bg-gray-800 p-2 text-black dark:text-white hover:bg-gray-600 dark:hover:bg-gray-600 hover:text-white dark:hover:text-white">Statistics</a>
+                            <a href="{{ route('prizes.index') }}" class="w-full sm:w-1/3 h-20 flex items-center justify-center rounded-md border border-black bg-white dark:bg-gray-800 p-2 text-black dark:text-white hover:bg-gray-600 dark:hover:bg-gray-600 hover:text-white dark:hover:text-white">Prizes</a>
                         </div>
                     </div>
                 </div>

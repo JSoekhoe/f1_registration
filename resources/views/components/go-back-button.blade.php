@@ -1,3 +1,3 @@
-<a href="javascript:void(0);" onclick="history.back();" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-600"">
+<a href="javascript:void(0);" onclick="history.back();" class="text-black dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-800">
     Go Back
 </a>

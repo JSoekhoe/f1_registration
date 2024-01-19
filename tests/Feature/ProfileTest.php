@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use function Laravel\Prompts\password;
 
 class ProfileTest extends TestCase
 {
@@ -16,7 +17,14 @@ class ProfileTest extends TestCase
 
         $response = $this
             ->actingAs($user)
-            ->get('/profile');
+            ->patch('/profile', [
+                'username' => 'TestUser',
+                'email' => 'test@example.com',
+                'firstname' => 'Test',
+                'lastname' => 'Test',
+                'is_admin' => true,
+                'password' => bcrypt('Test'), // Use bcrypt() instead of Hash::make()
+            ]);
 
         $response->assertOk();
     }
@@ -28,8 +36,12 @@ class ProfileTest extends TestCase
         $response = $this
             ->actingAs($user)
             ->patch('/profile', [
-                'name' => 'Test User',
+                'username' => 'TestUser',
                 'email' => 'test@example.com',
+                'firstname' => 'Test',
+                'lastname' => 'Test',
+                'is_admin' => true,
+                'password' => bcrypt('Test'), // Use bcrypt() instead of Hash::make()
             ]);
 
         $response
@@ -38,8 +50,12 @@ class ProfileTest extends TestCase
 
         $user->refresh();
 
-        $this->assertSame('Test User', $user->name);
+        $this->assertSame('TestUser', $user->username);
         $this->assertSame('test@example.com', $user->email);
+        $this->assertSame('Test', $user->firstname);
+        $this->assertSame('Test', $user->lastname);
+        $this->assertSame(true, $user->is_admin);
+        $this->assertSame('Test', $user->password);
         $this->assertNull($user->email_verified_at);
     }
 
@@ -50,8 +66,12 @@ class ProfileTest extends TestCase
         $response = $this
             ->actingAs($user)
             ->patch('/profile', [
-                'name' => 'Test User',
-                'email' => $user->email,
+                'username' => 'TestUser',
+                'email' => 'test@example.com',
+                'firstname' => 'Test',
+                'lastname' => 'Test',
+                'is_admin' => true,
+                'password' => bcrypt('Test'),
             ]);
 
         $response
@@ -67,9 +87,15 @@ class ProfileTest extends TestCase
 
         $response = $this
             ->actingAs($user)
-            ->delete('/profile', [
-                'password' => 'password',
+            ->patch('/profile', [
+                'username' => 'TestUser',
+                'email' => 'test@example.com',
+                'firstname' => 'Test',
+                'lastname' => 'Test',
+                'is_admin' => true,
+                'password' => bcrypt('Test'), // Use bcrypt() instead of Hash::make()
             ]);
+
 
         $response
             ->assertSessionHasNoErrors()
@@ -86,8 +112,13 @@ class ProfileTest extends TestCase
         $response = $this
             ->actingAs($user)
             ->from('/profile')
-            ->delete('/profile', [
-                'password' => 'wrong-password',
+            ->delete('/profile',[
+                        'username' => 'TestUser',
+                        'email' => 'test@example.com',
+                        'firstname' => 'Test',
+                        'lastname' => 'Test',
+                        'is_admin' => true,
+                        'password' => 'wrong-password',
             ]);
 
         $response

@@ -22,7 +22,13 @@
                         {{ __('Leaderboard') }}
                     </x-nav-link>
                     <x-nav-link :href="route('races.index')" :active="request()->routeIs('races.index')">
-                        {{ __('Races') }}
+                        {{ __('Historical Races') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('statistics.index')" :active="request()->routeIs('statistics.index')">
+                        {{ __('Statistics') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('prizes.index')" :active="request()->routeIs('prizes.index')">
+                        {{ __('Prizes') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -90,7 +96,13 @@
                 {{ __('Leaderboard') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('races.index')" :active="request()->routeIs('races.index')">
-                {{ __('Races') }}
+                {{ __('Historical Races') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('statistics.index')" :active="request()->routeIs('statistics.index')">
+                {{ __('Statistics') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('prizes.index')" :active="request()->routeIs('prizes.index')">
+                {{ __('Prizes') }}
             </x-responsive-nav-link>
         </div>
 
