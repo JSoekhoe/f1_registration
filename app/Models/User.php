@@ -48,8 +48,9 @@ class User extends Authenticatable
 
     public function laps()
     {
-        return $this->hasMany(Laps::class);
+        return $this->hasMany(Laps::class, 'user_id', 'id');
     }
+
     public function isAdmin()
     {
         return $this->is_admin; // Assuming is_admin is a boolean
@@ -58,5 +59,10 @@ class User extends Authenticatable
     public function races()
     {
         return $this->hasMany(Race::class);
+    }
+
+    public function prizes()
+    {
+        return $this->belongsToMany(Prize::class, 'user_prizes')->withTimestamps();
     }
 }

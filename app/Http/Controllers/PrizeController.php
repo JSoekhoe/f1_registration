@@ -4,19 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Prize;
+use App\Models\User;
 
 class PrizeController extends Controller
 {
     public function index()
     {
-        $prizes = Prize::with('lap')->get();
-        return view('prizes.index', compact('prizes'));
+        $prizes = Prize::all();
+        $user = auth()->user();
+
+        return view('prizes.index', compact('prizes', 'user'));
     }
 
-    public function create()
-    {
-        return view('prizes.create');
-    }
 
     public function store(Request $request)
     {
@@ -31,31 +30,47 @@ class PrizeController extends Controller
             'description' => $request->input('description'),
         ]);
 
+        // Check if the created prize meets any achievement criteria for the user
+        $this->checkAchievements(auth()->user());
+
         return redirect()->route('prizes.index')->with('success', 'Prijs succesvol toegevoegd');
     }
 
-    public function show(Prize $prize)
+    // Other methods like show, edit, update, destroy...
+
+    private function checkAchievements(User $user)
     {
-        // You can implement the logic for displaying a specific prize if needed
+        $prizes = Prize::all();
+
+        foreach ($prizes as $prize) {
+            $methodName = 'check' . str_replace(' ', '', ucwords(strtolower($prize->title))) . 'Achievement';
+            if (method_exists($this, $methodName)) {
+                $this->$methodName($user);
+            }
+        }
     }
 
-    public function edit(Prize $prize)
+    private function checkFirstLapAchievement(User $user)
     {
-        $lap = $prize->lap;
-
-        return view('prizes.edit', [
-            'lap' => $lap,
-            'prize' => $prize,
-        ]);
+        if ($user->laps()->where('validated', true)->exists() && !$user->prizes()->where('title', 'First Lap')->exists()) {
+            $this->attachPrizeToUser($user, 'First Lap');
+        }
     }
 
-    public function update(Request $request, Prize $prize)
+    private function checkSecondLapAchievement(User $user)
     {
-        // Implement the logic for updating a prize if needed
+        if ($user->laps()->where('validated', true)->count() >= 2 && !$user->prizes()->where('title', 'Second Lap')->exists()) {
+            $this->attachPrizeToUser($user, 'Second Lap');
+        }
     }
 
-    public function destroy(Prize $prize)
+    // Add more achievement check methods as needed
+
+    private function attachPrizeToUser(User $user, $prizeTitle)
     {
-        // Implement the logic for deleting a prize if needed
+        $prize = Prize::where('title', $prizeTitle)->first();
+        if ($prize) {
+            $user->prizes()->attach($prize->id);
+        }
     }
 }

@@ -9,20 +9,26 @@
         <div class="container mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 <div class="p-4 sm:px-20 bg-white border-b border-gray-200">
-                    <table class="table table-striped">
+                    <table class="min-w-full divide-y divide-gray-200">
                         <thead>
                         <tr>
-                            <th scope="col">Title</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Prize Giver</th>
+                            <th class="px-4 py-2 md:px-6 md:py-3 bg-gray-50 dark:bg-gray-800 text-left text-xs md:text-sm leading-4 font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Title</th>
+                            <th class="px-4 py-2 md:px-6 md:py-3 bg-gray-50 dark:bg-gray-800 text-left text-xs md:text-sm leading-4 font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Description</th>
+                            <th class="px-4 py-2 md:px-6 md:py-3 bg-gray-50 dark:bg-gray-800 text-left text-xs md:text-sm leading-4 font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Achieved</th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="bg-white divide-y divide-gray-200 dark:divide-gray-700">
                         @foreach ($prizes as $prize)
                             <tr>
-                                <td>{{ $prize->title }}</td>
-                                <td>{{ $prize->description }}</td>
-                                <td>{{ $prize->prizeGiver }}</td>
+                                <td class="px-4 py-2 md:px-6 md:py-4 whitespace-no-wrap">{{ $prize->title }}</td>
+                                <td class="px-4 py-2 md:px-6 md:py-4 whitespace-no-wrap">{{ $prize->description }}</td>
+                                <td class="px-4 py-2 md:px-6 md:py-4 whitespace-no-wrap">
+                                    @if ($user->prizes->contains($prize))
+                                        <span class="text-green-500">Achieved</span>
+                                    @else
+                                        <span class="text-red-500">Not Achieved</span>
+                                    @endif
+                                </td>
                             </tr>
                         @endforeach
                         </tbody>
@@ -30,20 +36,5 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="container mx-auto sm:px-6 lg:px-8">
-        @foreach($prizes as $prize)
-            <div class="p-4 mb-4 bg-white border rounded shadow">
-                <h1 class="text-2xl font-semibold">{{ $prize->title }}</h1>
-                <p>{{ $prize->description }}</p>
-
-                @if($prize->title === 'first race' && $prize->lap && !$prize->lap->validated)
-                    <p class="text-red-500">Complete your first race to unlock this prize!</p>
-                @else
-                    <p class="text-green-500">This prize is unlocked!</p>
-                @endif
-            </div>
-        @endforeach
     </div>
 </x-app-layout>

@@ -65,10 +65,15 @@ class DatabaseSeeder extends Seeder
         }
 
         $prizes = [
-            ['title' => 'first race', 'description' => 'get your first race validated','location' => $location],
-            ['title' => 'second race', 'description' => 'get your second race validated'],
-            ['title' => 'speed demon', 'description' => 'have the fastest validated lap on the Autódromo Hermanos Rodríguez - Mexico'],
-            // ... add more prize descriptions
+            ['title' => 'First Lap', 'description' => 'Complete and get your first lap validated.'],
+            ['title' => 'Second Lap', 'description' => 'Complete and get your second lap validated.'],
+            ['title' => 'Record Breaker', 'description' => 'Set a new track record for the fastest lap time at any circuit.'],
+            ['title' => 'Furious Challenger', 'description' => 'Compete in at least 10 laps in a single season.'],
+            ['title' => 'Seasoned Veteran', 'description' => 'Complete 25 laps in a single season.'],
+            ['title' => 'Iron Racer', 'description' => 'Have a lap validated on every circuit.'],
+            ['title' => 'Milestone Achiever', 'description' => 'Reach a significant milestone, such as completing 100 laps in your racing career.'],
+            ['title' => 'Season Sweep', 'description' => 'Set a new track record for the fastest lap time at any circuit.'],
+            ['title' => 'The GOAT', 'description' => 'Have the fastest lap on every circuit in a season.'],
         ];
 
         foreach ($prizes as $prizeData) {
@@ -76,13 +81,13 @@ class DatabaseSeeder extends Seeder
             $prize->save();
         }
 
-        User::factory()
-            ->count(10)
-            ->create();
+//        User::factory()
+//            ->count(10)
+//            ->create();
 
-        Laps::factory()
-            ->count(1000)
-            ->create();
+//        Laps::factory()
+//            ->count(1000)
+//            ->create();
     }
 }
 

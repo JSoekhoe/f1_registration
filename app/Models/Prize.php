@@ -9,17 +9,10 @@ class Prize extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'description', 'prize_giver_id'];
+    protected $fillable = ['title', 'description'];
 
-    public function prizeGiver()
+    public function users()
     {
-        return $this->belongsTo(User::class, 'prize_giver_id');
-    }
-
-    public function lap()
-    {
-        return $this->belongsTo(Laps::class, 'validated');
+        return $this->belongsToMany(User::class, 'user_prizes')->withTimestamps();
     }
 }
-
-

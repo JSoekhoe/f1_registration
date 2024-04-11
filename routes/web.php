@@ -60,6 +60,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/prizes', [\App\Http\Controllers\PrizeController::class, 'index'])->name('prizes.index');
+    Route::post('/prizes/achieve/{prize}', [\App\Http\Controllers\PrizeController::class, 'achieve'])->name('prizes.achieve');
 });
 
     require __DIR__.'/auth.php';
