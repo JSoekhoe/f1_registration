@@ -12,7 +12,7 @@ class CreatePrizesTable extends Migration
     public function up(): void
     {
         Schema::create('prizes', function (Blueprint $table) {
-            $table->id();
+            $table->id('id');
             $table->string('title')->nullable();
             $table->text('description')->nullable();
             $table->timestamps();

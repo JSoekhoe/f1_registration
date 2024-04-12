@@ -23,7 +23,7 @@
                                 <td class="px-4 py-2 md:px-6 md:py-4 whitespace-no-wrap">{{ $prize->title }}</td>
                                 <td class="px-4 py-2 md:px-6 md:py-4 whitespace-no-wrap">{{ $prize->description }}</td>
                                 <td class="px-4 py-2 md:px-6 md:py-4 whitespace-no-wrap">
-                                    @if ($user->prizes->contains($prize))
+                                    @if (in_array($prize->id, $userPrizes))
                                         <span class="text-green-500">Achieved</span>
                                     @else
                                         <span class="text-red-500">Not Achieved</span>

@@ -81,13 +81,13 @@ class DatabaseSeeder extends Seeder
             $prize->save();
         }
 
-//        User::factory()
-//            ->count(10)
-//            ->create();
+        User::factory()
+            ->count(10)
+            ->create();
 
-//        Laps::factory()
-//            ->count(1000)
-//            ->create();
+        Laps::factory()
+            ->count(1000)
+            ->create();
     }
 }
 

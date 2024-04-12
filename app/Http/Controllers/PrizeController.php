@@ -10,67 +10,64 @@ class PrizeController extends Controller
 {
     public function index()
     {
-        $prizes = Prize::all();
         $user = auth()->user();
+        $userPrizes = $user->prizes()->pluck('prize_id')->toArray();
 
-        return view('prizes.index', compact('prizes', 'user'));
+        // Alle beschikbare prijzen uit de database halen
+        $prizes = Prize::all();
+
+        // Voor elke prijs controleren of de gebruiker deze heeft behaald
+        foreach ($prizes as $prize) {
+            $prize->achieved = in_array($prize->id, $userPrizes);
+        }
+
+        // Check voor nieuwe prijzen die de gebruiker mogelijk heeft verdiend
+        $this->checkAchievements($user);
+
+        return view('prizes.index', compact('prizes', 'userPrizes'));
     }
 
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-        ]);
-
-        // Assuming you want to associate the prize with the authenticated user
-        $prize = auth()->user()->prizes()->create([
-            'title' => $request->input('title'),
-            'description' => $request->input('description'),
-        ]);
-
-        // Check if the created prize meets any achievement criteria for the user
-        $this->checkAchievements(auth()->user());
-
-        return redirect()->route('prizes.index')->with('success', 'Prijs succesvol toegevoegd');
-    }
-
-    // Other methods like show, edit, update, destroy...
 
     private function checkAchievements(User $user)
     {
-        $prizes = Prize::all();
+        // Get all available prizes
+        $availablePrizes = Prize::all();
 
-        foreach ($prizes as $prize) {
-            $methodName = 'check' . str_replace(' ', '', ucwords(strtolower($prize->title))) . 'Achievement';
-            if (method_exists($this, $methodName)) {
-                $this->$methodName($user);
+        // Loop through all prizes and check if the user meets the requirements
+        foreach ($availablePrizes as $prize) {
+            // If the user meets the requirements and hasn't earned the prize yet, attach it to the user
+            if ($this->userMeetsRequirementsForPrize($user, $prize) && !$user->prizes()->where('title', $prize->title)->exists()) {
+                $this->attachPrizeToUser($user, $prize->title);
             }
         }
     }
 
-    private function checkFirstLapAchievement(User $user)
+    private function userMeetsRequirementsForPrize(User $user, Prize $prize)
     {
-        if ($user->laps()->where('validated', true)->exists() && !$user->prizes()->where('title', 'First Lap')->exists()) {
-            $this->attachPrizeToUser($user, 'First Lap');
+        // Implement logic to check requirements for each prize
+        switch ($prize->title) {
+            case 'First Lap':
+                return $user->laps()->where('validated', true)->exists();
+            case 'Second Lap':
+                return $user->laps()->where('validated', true)->count() >= 2;
+            case 'Record Breaker':
+                // Implement logic for Record Breaker prize
+                break;
+            case 'Furious Challenger':
+                // Implement logic for Furious Challenger prize
+                break;
+            // Add cases for other prizes and implement logic for each case
+            default:
+                return false;
         }
     }
-
-    private function checkSecondLapAchievement(User $user)
-    {
-        if ($user->laps()->where('validated', true)->count() >= 2 && !$user->prizes()->where('title', 'Second Lap')->exists()) {
-            $this->attachPrizeToUser($user, 'Second Lap');
-        }
-    }
-
-    // Add more achievement check methods as needed
 
     private function attachPrizeToUser(User $user, $prizeTitle)
     {
         $prize = Prize::where('title', $prizeTitle)->first();
         if ($prize) {
-            $user->prizes()->attach($prize->id);
+            $user->prizes()->attach($prize->prize_id); // Change 'id' to 'prize_id'
         }
     }
 }
